@@ -1,12 +1,60 @@
 {
-    "author":"anand",
-    "profile":"",
+    "author": "anand",
+    "contact": "",
      
-    "poems":[
+    "books":[
         {
-            "title":"",
-            "line":"",
-            "meaning":""
+            "booktitle": "",
+            "coverimage": "",
+            "description": "",
+            "category": "",
+            "context":[
+                {
+                    "title": "",
+                    "line": "",
+                    "meaning": "",
+                },
+                {
+                    "title": "",
+                    "line": "",
+                    "meaning": "",
+                }, 
+                {
+                    "title": "",
+                    "line": "",
+                    "meaning": "",
+                }, 
+                {
+                    "title": "",
+                    "line": "",
+                    "meaning": "",
+                },
+                  {
+            "booktitle": "",
+            "description":"",
+            "category": "",
+            "context":[
+                {
+                    "title": "",
+                    "line": "",
+                    "meaning": "",
+                },
+                {
+                    "title": "",
+                    "line": "",
+                    "meaning": "",
+                }, 
+                {
+                    "title": "",
+                    "line": "",
+                    "meaning": "",
+                }, 
+                {
+                    "title": "",
+                    "line": "",
+                    "meaning": "",
+                },
+            ],
         }
     
     ]
