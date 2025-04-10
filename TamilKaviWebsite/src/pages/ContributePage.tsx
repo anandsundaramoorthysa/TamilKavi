@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, File, FileJson, Github, GitPullRequest, Send, Code } from 'lucide-react';
 
 const ContributePage = () => {
+  useEffect(() => {
+    document.title = 'Contribute | TamilKavi';
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="py-12">
       <div className="container-custom">

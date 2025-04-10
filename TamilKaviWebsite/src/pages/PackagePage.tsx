@@ -1,9 +1,12 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Clipboard, Code, CopyCheck, Database, Download, Package } from 'lucide-react';
 import { useState } from 'react';
 
 const PackagePage = () => {
+  useEffect(() => {
+    document.title = 'Package | TamilKavi';
+    window.scrollTo(0, 0);
+  }, []);
   const [copied, setCopied] = useState<Record<string, boolean>>({
     install: false,
     import: false,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect } from 'react';
 import { Github, Globe, Mail, Twitter } from 'lucide-react';
 import { FaLinkedin, FaTelegram, FaInstagram } from 'react-icons/fa';
 
@@ -41,6 +41,10 @@ const teamMembers: TeamMember[] = [
 ];
 
 const TeamPage = () => {
+  useEffect(() => {
+    document.title = 'Team | TamilKavi';
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="py-16 bg-gradient-to-br from-white via-gray-50 to-white">
       <div className="container-custom">

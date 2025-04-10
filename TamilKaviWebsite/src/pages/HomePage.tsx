@@ -1,9 +1,13 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Book, Github, Heart, Search } from 'lucide-react';
 
 const HomePage = () => {
+  useEffect(() => {
+    document.title = 'Home | TamilKavi';
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       {/* Hero Section */}

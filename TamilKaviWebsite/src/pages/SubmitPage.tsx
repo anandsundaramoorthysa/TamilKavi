@@ -1,8 +1,11 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AlertCircle, Check, Loader2 } from 'lucide-react';
 
 const SubmitPage = () => {
+  useEffect(() => {
+    document.title = 'Submit | TamilKavi';
+    window.scrollTo(0, 0);
+  }, []);
   const [formData, setFormData] = useState({
     authorName: '',
     bookName: '',

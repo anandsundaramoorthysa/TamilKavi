@@ -1,9 +1,12 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { poemsData } from '../data/poems';
 import { Search } from 'lucide-react';
 
 const PreviewPage = () => {
+  useEffect(() => {
+    document.title = 'Preview | TamilKavi';
+    window.scrollTo(0, 0);
+  }, []);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAuthor, setFilterAuthor] = useState('');
   

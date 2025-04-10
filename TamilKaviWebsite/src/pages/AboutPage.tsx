@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { PenTool, Users, BookOpen, Code, HeartHandshake, Terminal } from 'lucide-react';
 
 const AboutPage = () => {
+  useEffect(() => {
+    document.title = 'About | TamilKavi';
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="py-12">
       <div className="container-custom">
