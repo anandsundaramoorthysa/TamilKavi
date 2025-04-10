@@ -31,12 +31,12 @@ const teamMembers: TeamMember[] = [
   },
   {
     name: 'Booapalan S',
-    role: 'Lead Developer',
+    role: 'Python Developer',
     github: 'boopalan-s',
-    telegram: 'https://t.me/#1004778140',
+    telegram: 'https://t.me/+917558147649',
     email: 'content.boopalan@gmail.com',
-    avatar: 'https://i.pravatar.cc/300?img=5',
-    bio: 'Full-stack developer with a love for poetry and open-source projects.'
+    avatar: 'https://gitlab.com/uploads/-/system/user/avatar/22134717/avatar.png',
+    bio: 'I\'m a tech enthusiast who loves working with Python, open-source tools, and Linux systems.'
   }
 ];
 
