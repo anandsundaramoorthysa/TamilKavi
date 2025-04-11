@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import { ArrowLeftCircle, Mail } from "lucide-react";
+import { ArrowLeftCircle, Contact, Mail } from "lucide-react";
 
 const NotFound = () => {
   const location = useLocation();
@@ -33,7 +33,7 @@ const NotFound = () => {
 
         {/* Tamil quote */}
         <p className="italic text-sm text-tamil-gold mb-4">
-          "இங்கு நீங்கள் தேடும் பாதை இல்லை... ஆனால் கவிதைகளோடு வழிகாட்டுகிறோம்."
+          இங்கு நீங்கள் தேடும் பாதை இல்லை... நீங்கள் திரும்பி செல்வதற்கான வழியைக் கண்டுபிடிக்க நாங்கள் தருகிறோம்.
         </p>
 
         {/* Message */}
@@ -53,12 +53,12 @@ const NotFound = () => {
           </Link>
 
           <Link
-            to="/contact"
+            to="/team"
             className="inline-flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-5 py-3 rounded-full transition duration-300 shadow-md"
-            aria-label="Contact Us"
+            aria-label="Our Team"
           >
-            <Mail className="mr-2 h-5 w-5" />
-            Contact
+            <Contact className="mr-2 h-5 w-5" />
+            Our Team
           </Link>
         </div>
       </div>
