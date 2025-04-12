@@ -1,4 +1,5 @@
-import React, {useEffect } from 'react';
+// TeamPage.tsx
+import React, { useEffect } from 'react';
 import { Github, Globe, Mail, Twitter } from 'lucide-react';
 import { FaLinkedin, FaTelegram, FaInstagram } from 'react-icons/fa';
 
@@ -27,7 +28,7 @@ const teamMembers: TeamMember[] = [
     website: 'https://anand.jigg.win',
     email: 'sanand03072005@gmail.com',
     avatar: 'https://media.licdn.com/dms/image/v2/D4D03AQEg7Gw6Qi6AdA/profile-displayphoto-shrink_800_800/B4DZTUmfrIGcAc-/0/1738733660369?e=1749686400&v=beta&t=gkxOE9ruFyZYeosoSsn8UfbiKIJlYiMQLF-8zuQZYUc',
-    bio: 'LCM\'25 | Tech & Finance Enthusiast | Blog Writer | Developer & Prompt Engineer | Explore Which I Love'
+    bio: "LCM'25 | Tech & Finance Enthusiast | Blog Writer | Developer & Prompt Engineer | Explore Which I Love"
   },
   {
     name: 'Booapalan S',
@@ -36,7 +37,7 @@ const teamMembers: TeamMember[] = [
     telegram: 'https://t.me/+917558147649',
     email: 'content.boopalan@gmail.com',
     avatar: 'https://gitlab.com/uploads/-/system/user/avatar/22134717/avatar.png',
-    bio: 'I\'m a tech enthusiast who loves working with Python, open-source tools, and Linux systems.'
+    bio: "I'm a tech enthusiast who loves working with Python, open-source tools, and Linux systems."
   }
 ];
 
@@ -45,20 +46,18 @@ const TeamPage = () => {
     document.title = 'Team | TamilKavi';
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <div className="py-16 bg-gradient-to-br from-white via-gray-50 to-white">
       <div className="container-custom">
         <h1 className="text-4xl font-extrabold text-center text-tamil-blue-dark mb-4">
-          Meet the Team
+          Enga Team!
         </h1>
-        <p className="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          The passionate individuals behind TamilKavi, blending code and culture to bring Tamil poetry to the world.
-        </p>
 
         {/* Core Team */}
         <div className="max-w-4xl mx-auto mb-20">
           <h2 className="text-2xl font-semibold mb-8 text-center text-tamil-green-dark">
-            Core Team
+          முக்கிய அணி
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {teamMembers.map((member) => (
@@ -118,42 +117,54 @@ const TeamPage = () => {
           </div>
         </div>
 
-        {/* Contributors Section */}
+        {/* Contributors */}
         <div className="max-w-5xl mx-auto mb-20">
           <h2 className="text-2xl font-semibold mb-6 text-center text-tamil-gold-dark">
-            Contributors
+            பங்களிப்பாளர்கள்
           </h2>
           <p className="text-center text-gray-700 mb-8 px-4">
-            We’re grateful to the growing community of contributors who share their code, poems, and passion with TamilKavi.
+            TamilKavi-ku code, kavidhai ellam share panna nanbarkaluku romba nandri!
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            {[...Array(2)].map((_, i) => (
-              <a
-                key={i}
-                href={`https://github.com/contributor${i}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-40 flex flex-col items-center text-center bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transform hover:scale-[1.02] transition-all duration-300 p-4"
-              >
-                <img
-                  src={`https://i.pravatar.cc/150?img=${i + 10}`}
-                  alt={`Contributor ${i + 1}`}
-                  className="w-20 h-20 rounded-full mb-2 shadow-sm object-cover"
-                />
-                <span className="text-sm font-medium text-gray-800 hover:text-tamil-blue transition-colors">
-                  Contributor {i + 1}
-                </span>
-              </a>
-            ))}
+            <a
+              href="https://github.com/Gagan9025"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-40 flex flex-col items-center text-center bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transform hover:scale-[1.02] transition-all duration-300 p-4"
+            >
+              <img
+                src="https://media.licdn.com/dms/image/v2/D5603AQEx3q462RbDsQ/profile-displayphoto-shrink_400_400/B56ZVqrXv4HQAg-/0/1741251513543?e=1749686400&v=beta&t=o8LESh6krvXhF_xFPHZzL8ISib3Cqvz3X9ed24LpQ1c"
+                alt="Gagan C"
+                className="w-20 h-20 rounded-full mb-2 shadow-sm object-cover"
+              />
+              <span className="text-sm font-medium text-gray-800 hover:text-tamil-blue transition-colors">
+                Gagan C
+              </span>
+            </a>
+
+            <a
+              href="https://github.com/contributor2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-40 flex flex-col items-center text-center bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transform hover:scale-[1.02] transition-all duration-300 p-4"
+            >
+              <img
+                src="https://media.licdn.com/dms/image/v2/D5603AQFIuZCmYvwFgQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1723296293067?e=1749686400&v=beta&t=Emv3Gdh_GynlSbBkg5fFC6YMZWBk_mWc00SyI6ChvO4"
+                alt="Rohtih P"
+                className="w-20 h-20 rounded-full mb-2 shadow-sm object-cover"
+              />
+              <span className="text-sm font-medium text-gray-800 hover:text-tamil-blue transition-colors">
+                Rohith P
+              </span>
+            </a>
           </div>
         </div>
 
-        {/* Join Us Section */}
+        {/* Join Us */}
         <div className="max-w-3xl mx-auto text-center py-12 px-6 bg-white/70 backdrop-blur-md border border-tamil-earth rounded-xl shadow">
-          <h2 className="text-2xl font-semibold text-tamil-blue-dark mb-4">Join Our Mission</h2>
+          <h2 className="text-2xl font-semibold text-tamil-blue-dark mb-4">Enga Kooda Serunga!</h2>
           <p className="text-base text-gray-700 mb-6">
-            Whether you're a poet, developer, translator or an enthusiast, we’d love to have you onboard.
-            Be a part of preserving and promoting Tamil literature in the digital age.
+            Nee oru kavignana? Developer-a? Illa Tamil rasigan-a? Tamil literature-ai digital-la preserve panna unga udhavi venum!
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <a
@@ -162,13 +173,13 @@ const TeamPage = () => {
               rel="noopener noreferrer"
               className="btn-primary px-5 py-2 rounded-xl shadow hover:scale-105 transition bg-tamil-blue text-white font-medium"
             >
-              Contribute on GitHub
+              GitHub-la Contribute pannunga
             </a>
             <a
               href="mailto:sanand03072005@gmail.com"
               className="btn-secondary px-5 py-2 rounded-xl border border-tamil-blue text-tamil-blue hover:bg-tamil-blue/10 font-medium"
             >
-              Contact Us
+              Mail anuppunga
             </a>
           </div>
         </div>
