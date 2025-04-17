@@ -19,7 +19,7 @@ const AboutPage = () => {
             <h2 className="text-2xl font-bold mb-4">TamilKaviனா என்ன?</h2>
             <p className="text-lg mb-4">
               TamilKavi ஒரு open-source முயற்சி. புதுப் புது தமிழ் கவிஞர்களோட கவிதைகளை சேகரிக்கவும், உபயோகிக்கவும் இந்த project உருவாக்கப்பட்டுள்ளது.
-              இந்த Python package மூலமாக, அந்த கவிதைகள் website/app development, AI/ML training, research-க்கு பயன்படுத்தலாம். தமிழ் இலக்கியத்தில் புதிய
+              இந்த Python package மூலமாக, அந்த கவிதைகளை website/app development, AI/ML training, research-க்கு பயன்படுத்தலாம். தமிழ் இலக்கியத்தில் புதிய
               குரல்களை ஒரு Python package-க்குள் கொண்டு வருவதுதான் இந்த முயற்சியின் முக்கிய நோக்கம்!
             </p>
           </div>
