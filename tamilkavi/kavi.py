@@ -2,6 +2,7 @@ from glob import glob
 from argparse import ArgumentParser
 from pprint import pprint
 import json
+import sys
 
 
 class KiviExtraction:
@@ -16,39 +17,44 @@ class KiviExtraction:
                 if each['author'] == name:
                     return each
 
-    def get_titles(self,specific=None):
+    def get_titles(self,title,specific=None):
         return_list = []
-        if specific != None:
-            for books in specific['books']:
+        if title != None:
+            if specific != []:
+                for books in specific['books']:
                     for context in books['context']:
-                        if context['title'] not in return_list:
-                            return_list.append( context )
-            return return_list
+                        if context['title'] == title:
+                            return_list.append(context)
+                return return_list
+            else:    
+                for each_author in self.saved_books:
+                    for books in each_author['books']:
+                        for context in books['context']:
+                            if context['title'] == title:
+                                return_list.append(context)
+                return return_list
+        
+    def get_book(self,book,specific=None):
+        return_list = []
+        match = False
+        if book != None:
+            if specific != []:
+                for books in specific['books']:
+                    if books['booktitle'] == book:
+                        specific['books'] = [books]
+                        match = True
+            else:    
+                for each_author in self.saved_books:
+                    for books in each_author['books']:
+                        if books['booktitle'] == book:
+                            return_list.append( books['booktitle'] )
+                            match = True
+        if not match:
+            specific['books'] = []
+            return specific
         else:
-            for books in self.saved_books['books']:
-                for context in books['context']:
-                    if context['title'] not in return_list:
-                        return_list.append(context['title'] )
-            return return_list
-
-    def get_context_by_title(self,title):
-        return_list = []
-        for books in self.saved_books['books']:
-            for context in books['context']:
-                if context['title'] == title:
-                    return_list.append(context)
-        return return_list
-
-    def get_books(self,title):
-        return_list = []
-        for books in self.saved_books['books']:
-            if books['booktitle'] == title:
-                return_list.append(books)
-        return return_list
-
-    def get_authors_books(self):
-        pass
-
+            return specific
+         
     def get_books_from_json(self):
         for file_path in (glob('kivisrc/*.json')):    
             with open(file_path,"r+",encoding="utf-8") as file:
@@ -57,21 +63,47 @@ class KiviExtraction:
 
 parser = ArgumentParser(description="tamilkavipy",epilog="~~~~~")
 
-parser.add_argument("-a",'--authors',dest="authors",type=str,help="---")
-parser.add_argument("-t",'--title',dest="title",type=str,help="---")
-
+parser.add_argument("-a",'--authors',dest="authors",default=None,type=str,help="---")
+parser.add_argument("-t",'--title',dest="title", default=None,type=str,help="---")
+parser.add_argument("-b",'--book',dest="book", default=None,type=str,help="---")
+parser.add_argument("-s",'--show',dest="show", default=None,type=str,help="---")
 
 args = parser.parse_args()
 liberary = KiviExtraction()
 
+sys_len = int(len(sys.argv)) - 1
 global_store = []
 
-if args.authors:
+if args.authors != None:
     global_store = liberary.get_authors(args.authors)
+    sys_len = sys_len - 2
+    if sys_len == 0:
+        for key,value in global_store.items():
+            if not isinstance(value,list):
+                print(key," : ",value)
+            else:
+                all_books_1 = [ v["booktitle"] for v in value]
+                print("books : ")
+                for index, each_book in enumerate(all_books_1):
+                    print("\t",index," : ",each_book)
 
-if args.title:
-    global_store = liberary.get_titles(global_store)
-    
+if args.book != None:
+    global_store = liberary.get_book(args.book, global_store)
+    sys_len = sys_len - 2
+    if sys_len == 0:
+        for key,value in global_store.items():
+            if not isinstance(value,list):
+                print(key," : ",value)
+            else:
+                all_books_1 = [ v["booktitle"] for v in value]
+                print("books : ")
+                for index, each_book in enumerate(all_books_1):
+                    print("\t",index," : ",each_book)
 
-
-pprint(global_store)
+if args.title != None:
+    global_store = liberary.get_titles(args.title, global_store)
+    sys_len = sys_len - 2
+    if sys_len == 0:
+        for each in global_store:
+            pprint(each)
+   
