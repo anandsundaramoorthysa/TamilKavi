@@ -3,107 +3,131 @@ from argparse import ArgumentParser
 from pprint import pprint
 import json
 import sys
+import os 
 
-
-class KiviExtraction:
-    
+class KaviExtraction:
     def __init__(self):
-        self.saved_books = []
-        self.get_books_from_json()
- 
-    def get_authors(self,name):
-        if name != 'all':
-            for each in self.saved_books:
-                if each['author'] == name:
-                    return each
+        self.saved_authors_data = []
+        self.kavisrc_path = os.path.join(os.path.dirname(__file__), 'kavisrc') 
+        self.get_authors_data_from_json()
 
-    def get_titles(self,title,specific=None):
-        return_list = []
-        if title != None:
-            if specific != []:
-                for books in specific['books']:
-                    for context in books['context']:
-                        if context['title'] == title:
-                            return_list.append(context)
-                return return_list
-            else:    
-                for each_author in self.saved_books:
-                    for books in each_author['books']:
-                        for context in books['context']:
-                            if context['title'] == title:
-                                return_list.append(context)
-                return return_list
-        
-    def get_book(self,book,specific=None):
-        return_list = []
-        match = False
-        if book != None:
-            if specific != []:
-                for books in specific['books']:
-                    if books['booktitle'] == book:
-                        specific['books'] = [books]
-                        match = True
-            else:    
-                for each_author in self.saved_books:
-                    for books in each_author['books']:
-                        if books['booktitle'] == book:
-                            return_list.append( books['booktitle'] )
-                            match = True
-        if not match:
-            specific['books'] = []
-            return specific
+    def get_authors_data_from_json(self):
+        for file_path in glob(os.path.join(self.kavisrc_path, '*.json')):
+            try:
+                with open(file_path, "r", encoding="utf-8") as file:
+                    author_data = json.load(file)
+                    if "author" in author_data and "books" in author_data:
+                         self.saved_authors_data.append(author_data)
+                    else:
+                         print(f"Warning: Skipping file {os.path.basename(file_path)} - Missing 'author' or 'books' key.")
+            except FileNotFoundError:
+                 print(f"Error: File not found {file_path}")
+            except json.JSONDecodeError:
+                 print(f"Error: Could not decode JSON from {file_path}")
+            except Exception as e:
+                 print(f"An unexpected error occurred while loading {file_path}: {e}")
+
+
+    def find_authors_data(self, author_name):
+        """Find author data by name."""
+        if author_name == 'all':
+            return self.saved_authors_data 
         else:
-            return specific
-         
-    def get_books_from_json(self):
-        for file_path in (glob('kivisrc/*.json')):    
-            with open(file_path,"r+",encoding="utf-8") as file:
-                self.saved_books.append( json.load(file) )
+            found_authors = [
+                author_data for author_data in self.saved_authors_data
+                if author_data.get('author') == author_name
+            ]
+            return found_authors 
 
+    def find_books_data(self, book_title, authors_data_list):
+        """Find book data by title within a list of authors' data."""
+        if not authors_data_list:
+            return [] 
 
-parser = ArgumentParser(description="tamilkavipy",epilog="~~~~~")
+        found_books = []
+        for author_data in authors_data_list:
+            for book_data in author_data.get('books', []):
+                if book_data.get('booktitle') == book_title:
+                    found_books.append(book_data)
+        return found_books 
 
-parser.add_argument("-a",'--authors',dest="authors",default=None,type=str,help="---")
-parser.add_argument("-t",'--title',dest="title", default=None,type=str,help="---")
-parser.add_argument("-b",'--book',dest="book", default=None,type=str,help="---")
-parser.add_argument("-s",'--show',dest="show", default=None,type=str,help="---")
+    def find_kavithais_data(self, kavithai_title, books_data_list):
+        """Find kavithai context data by title within a list of books' data."""
+        if not books_data_list:
+            return []
 
-args = parser.parse_args()
-liberary = KiviExtraction()
+        found_kavithais = []
+        for book_data in books_data_list:
+            for context_data in book_data.get('context', []):
+                if context_data.get('title') == kavithai_title:
+                    found_kavithais.append(context_data)
+        return found_kavithais 
 
-sys_len = int(len(sys.argv)) - 1
-global_store = []
+if __name__ == "__main__":
+    parser = ArgumentParser(description="Access and filter Tamil Kavithai data.", epilog="Example: python kavi.py -a anand -b 'இன்பமில்லா-இதயத்திலிருந்து' -t 'Mother-Love'")
 
-if args.authors != None:
-    global_store = liberary.get_authors(args.authors)
-    sys_len = sys_len - 2
-    if sys_len == 0:
-        for key,value in global_store.items():
-            if not isinstance(value,list):
-                print(key," : ",value)
-            else:
-                all_books_1 = [ v["booktitle"] for v in value]
-                print("books : ")
-                for index, each_book in enumerate(all_books_1):
-                    print("\t",index," : ",each_book)
-
-if args.book != None:
-    global_store = liberary.get_book(args.book, global_store)
-    sys_len = sys_len - 2
-    if sys_len == 0:
-        for key,value in global_store.items():
-            if not isinstance(value,list):
-                print(key," : ",value)
-            else:
-                all_books_1 = [ v["booktitle"] for v in value]
-                print("books : ")
-                for index, each_book in enumerate(all_books_1):
-                    print("\t",index," : ",each_book)
-
-if args.title != None:
-    global_store = liberary.get_titles(args.title, global_store)
-    sys_len = sys_len - 2
-    if sys_len == 0:
-        for each in global_store:
-            pprint(each)
+    parser.add_argument("-a", '--author', dest="author", default=None, type=str, help="Filter by author name ('all' for all authors).")
+    parser.add_argument("-b", '--book', dest="book", default=None, type=str, help="Filter by book title.")
+    parser.add_argument("-t", '--title', dest="title", default=None, type=str, help="Filter by kavithai title.")
    
+    args = parser.parse_args()
+
+    liberary = KaviExtraction() 
+
+    results = liberary.saved_authors_data
+
+    if args.author is not None:
+        results = liberary.find_authors_data(args.author)
+        if not results:
+            print(f"No data found for author: {args.author}")
+            sys.exit(1) 
+
+    if args.book is not None:
+         all_books_from_filtered_authors = []
+         for author_data in results:
+             all_books_from_filtered_authors.extend(author_data.get('books', []))
+
+         results = liberary.find_books_data(args.book, all_books_from_filtered_authors)
+         if not results:
+             if args.author is not None and results: 
+                 print(f"Book '{args.book}' not found for the specified author(s).")
+             else: 
+                 print(f"No data found for book: {args.book}")
+             sys.exit(1)
+
+
+    if args.title is not None:
+        results = liberary.find_kavithais_data(args.title, results)
+        if not results:
+            if args.book is not None and results: 
+                print(f"Kavithai with title '{args.title}' not found in book '{args.book}'.")
+            elif args.author is not None and results:
+                 print(f"Kavithai with title '{args.title}' not found for the specified author(s).")
+            else:
+                 print(f"No data found for title: {args.title}")
+            sys.exit(1)
+
+    if args.author is not None and args.book is None and args.title is None:
+        for author_data in results:
+             print(f"Author: {author_data.get('author')}")
+             print(f"Contact: {author_data.get('contact')}")
+             print("Books:")
+             for i, book_data in enumerate(author_data.get('books', [])):
+                 print(f"  {i}: {book_data.get('booktitle')}")
+
+    elif args.book is not None and args.title is None:
+         for book_data in results:
+             print(f"Book Title: {book_data.get('booktitle')}")
+             print(f"Category: {book_data.get('category')}")
+             print(f"Description: {book_data.get('description')}")
+             print("Kavithai Titles:")
+             for i, context_data in enumerate(book_data.get('context', [])):
+                  print(f"  {i}: {context_data.get('title')}")
+
+    elif args.title is not None:
+         for kavithai_data in results:
+              pprint(kavithai_data)
+
+    else:
+        parser.print_help()
+        print("\nNo filters applied. Please specify -a, -b, or -t.")
