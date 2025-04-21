@@ -4,6 +4,7 @@
     "books":[
         {
             "booktitle": "இன்பமில்லா-இதயத்திலிருந்து",
+            "booktitle_tanglish": "inbamilla-ithayathilirundhu",
             "coverimage": "https://site.com/coverimage",
             "description": "சாதிக்க தூதிக்கும் ஒரு சாதாரண மாணவன்",
             "category": "Feelings",
