@@ -1,34 +1,44 @@
 from setuptools import setup, find_packages
-import os 
+import os
 
+# Helper function to read file content
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    # Ensure reading with UTF-8 encoding
+    return open(os.path.join(os.path.dirname(__file__), fname), encoding='utf-8').read()
 
 setup(
-    name='tamilkavi', 
+    name='tamilkavi',
     version='0.1.0',
     description='A command-line tool for exploring Tamil Kavithaigal.',
-    long_description=read('README.md'), 
-    long_description_content_type='text/markdown', 
-    author='ANAND SUNDARAMOORTHY SA', 
-    author_email='sanand03072005@gmail.com', 
+    long_description=read('README.md'),
+    long_description_content_type='text/markdown',
+    author='ANAND SUNDARAMOORTHY SA and Boopalan S',
+    author_email='sanand03072005@gmail.com, content.boopalan@gmail.com',
     url='https://github.com/anandsundaramoorthysa/tamilkavi',
-    license='MIT', 
+    license='MIT',
     packages=find_packages(),
-classifiers=[
+    classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        # 'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Natural Language :: Tamil',
         'Topic :: Text Processing',
         'Topic :: Cultural',
+        # Add specific Python versions you support (>=3.7)
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
     ],
-keywords=['tamil', 'kavi', 'poetry', 'tamil poetry', 'text processing'],
+    keywords=['tamil', 'kavi', 'poetry', 'tamil poetry', 'text processing'],
 
     install_requires=[
-        'prettytable>=3.0.0', 
+        'prettytable>=3.0.0',
+        'importlib_resources ; python_version < "3.9"'
     ],
 
     package_data={
@@ -41,5 +51,7 @@ keywords=['tamil', 'kavi', 'poetry', 'tamil poetry', 'text processing'],
         ],
     },
 
-    python_requires='>=3.6', 
+    python_requires='>=3.7',
+
+    include_package_data=True,
 )
