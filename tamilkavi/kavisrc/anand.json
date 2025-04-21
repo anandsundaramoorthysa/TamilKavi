@@ -1,0 +1,20 @@
+{
+    "author": "anand",
+    "contact": "sanand03072005@gamil.com",     
+    "books":[
+        {
+            "booktitle": "இருண்ட-இதயத்திலிருந்து",
+            "booktitle_tanglish": "irundha-ithayathilirundhu",
+            "coverimage": "https://site.com/coverimage",
+            "description": "சாதிக்க தூதிக்கும் ஒரு சாதாரண மாணவன்",
+            "category": "Pain",
+            "context":[
+                {
+                    "title": "Life-Pain",
+                    "line": "கண் முன் கலைந்தது கனவு, நிம்மதி இழந்தது மனது, தூக்கத்தை இழந்தது உடம்பு.",
+                    "meaning": "..."
+                }
+            ]
+        }
+    ]
+}
