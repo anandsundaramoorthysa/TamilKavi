@@ -356,7 +356,7 @@ elif last_filter == 'book':
 
 # Displaying list of all unique titles (last filter was -t without argument)
 elif last_filter == 'title_list':
-    print("Available Poem Titles / Kidaiikkumāna Kavithai Thalaipugal:")
+    print("📑  Available Poem Titles / Irrukum Kavithai Thalaipugal:")
     if current_data: # current_data is the list of unique titles here
         for i, title in enumerate(current_data, start=1):
             print(f"{i}. {title}")
@@ -366,7 +366,7 @@ elif last_filter == 'title_list':
 
 # Displaying list of all books (last filter was -b without argument)
 elif last_filter == 'book_list':
-    print("Available Books / Kidaiikkumāna Puthagangal:")
+    print("📚  Available Books / Irrukum Puthagangal:")
     # current_data is already the list of book dicts here
     display_books_in_table(current_data)
 
@@ -392,7 +392,7 @@ elif last_filter == 'author': # Specific author requested and found
 # - args.author_name is '__list_all__' and no book/title filter was applied subsequently.
 # - No args are provided.
 elif args.author_name == '__list_all__' or (args.author_name is None and args.book_title is None and args.poem_title is None):
-     print("Available Authors / Kidaiikkumāna Ezhuthalargal:")
+     print("✍️  Available Authors / Irrukum Ezhuthalargal:")
      # current_data is the list of all authors in these cases
      if current_data:
          for author_data in current_data:
