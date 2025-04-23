@@ -1,5 +1,3 @@
-# tests/test_kavi.py
-
 import pytest
 import sys
 import os
