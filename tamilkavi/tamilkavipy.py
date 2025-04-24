@@ -289,6 +289,8 @@ tamilkavi -h
         print("A command-line tool for exploring Tamil Kavithaigal.")
         print("\nTo explore the commands. Check,")
         print("👉 tamilkavi -h")
+        print("\nAlso Check our website about this project:")
+        print("👉 https://tamilkavi.jigg.win")
         sys.exit(0) 
 
     library = KaviExtraction()
