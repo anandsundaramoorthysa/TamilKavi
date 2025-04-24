@@ -203,8 +203,8 @@ This project is released under the MIT License. You are free to use, modify, and
 
 If you have any questions, feedback, or suggestions, feel free to reach out to the authors:
 
-* **ANAND SUNDARAMOORTHY SA**: [sanand03072005@gmail.com](mailto:sanand03072005@gmail.com?subject=Question%20about%20Tamil%20Kavi%20CLI%20Tool&body=Dear%20Authors%2C%0A%0AI%20have%20a%20question%20regarding%20the%20Tamil%20Kavi%20tool%2E%0A%0A%5BYour%20Question%20Here%5D%0A%0AThank%20you%21%0A%5BYour%20Name%5D)
-* **Boopalan S**: [content.boopalan@gmail.com](mailto:content.boopalan@gmail.com?subject=Question%20about%20Tamil%20Kavi%20CLI%20Tool&body=Dear%20Authors%2C%0A%0AI%20have%20a%20question%20regarding%20the%20Tamil%20Kavi%20tool%2E%0A%0A%5BYour%20Question%20Here%5D%0A%0AThank%20you%21%0A%5BYour%20Name%5D)
+* **ANAND SUNDARAMOORTHY SA**: [sanand03072005@gmail.com](mailto:sanand03072005@gmail.com?subject=Question%20about%20Tamil%20Kavi%20CLI%20Tool&body=Dear%20Authors%2C%0A%0AI%20have%20a%20question%20regarding%20the%20Tamil%20Kavi%20Kavi%20python%20package%2E%0A%0A%5BYour%20Question%20Here%5D%0A%0AThank%20you%21%0A%5BYour%20Name%5D)
+* **Boopalan S**: [content.boopalan@gmail.com](mailto:content.boopalan@gmail.com?subject=Question%20about%20Tamil%20Kavi%20CLI%20Tool&body=Dear%20Authors%2C%0A%0AI%20have%20a%20question%20regarding%20the%20Tamil%20Kavi%20python%20package%2E%0A%0A%5BYour%20Question%20Here%5D%0A%0AThank%20you%21%0A%5BYour%20Name%5D)
 
 ## Acknowledge
 
