@@ -1,11 +1,13 @@
-# Tamil Kavi
-
-A command-line interface for exploring Tamil Kavithaigal (Tamil Poetry).
 
 ![PyPI version](https://img.shields.io/pypi/v/tamilkavi)
 ![License](https://img.shields.io/github/license/anandsundaramoorthysa/tamilkavi)
 ![Python Version](https://img.shields.io/static/v1?label=Python&message=3.7%2B&color=blue)
 ![PyPI Downloads](https://img.shields.io/pypi/dm/tamilkavi)
+
+# Tamil Kavi
+
+A command-line interface for exploring Tamil Kavithaigal (Tamil Poetry).
+
 ## Table of Contents
 
 - [About Project](#about-project)
