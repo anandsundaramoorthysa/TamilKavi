@@ -2,6 +2,7 @@
 ![License](https://img.shields.io/github/license/anandsundaramoorthysa/tamilkavi)
 ![Python Version](https://img.shields.io/static/v1?label=Python&message=3.7%2B&color=blue)
 ![PyPI Downloads](https://img.shields.io/pypi/dm/tamilkavi)
+[![Build Status](https://github.com/anandsundaramoorthysa/tamilkavi/actions/workflows/ci.yml/badge.svg)](https://github.com/anandsundaramoorthysa/tamilkavi/actions/workflows/ci.yml)
 
 # Tamil Kavi
 
