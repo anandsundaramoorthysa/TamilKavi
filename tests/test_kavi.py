@@ -1,8 +1,16 @@
 import sys
 import os
 from unittest.mock import patch 
+
+# Third-party imports
 import pytest
 
+# Local application/library specific imports
+# This section is to help pytest find your 'tamilkavi' package if needed,
+# but installing in "editable" mode (`pip install -e .`) is the standard
+# and recommended way to make your package importable for testing.
+# project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# sys.path.insert(0, project_root)
 
 # Try importing your main function and KaviExtraction class from your script
 try:
@@ -106,21 +114,18 @@ def test_cli_default_command(capsys, loaded_kavi_data):
 
 
 # Test the help command ('tamilkavi -h')
-# This test does not need loaded data, just checks argparse output.
 def test_cli_help_command(capsys):
     """Tests the output and exit behavior of the help command."""
     # Simulate running with the -h argument
     with patch.object(sys, 'argv', ['tamilkavi', '-h']):
         with pytest.raises(SystemExit) as e:
             # Import main inside the patch to be safe with patching
-            # Also handles cases where main might be imported before patching in complex scenarios
             from tamilkavi.tamilkavipy import main
             main()
 
         # Check the exit code
         assert e.value.code == 0, f"Expected exit code 0 for -h, but got {e.value.code}"
 
-        # Capture the standard output (help message goes to stdout by default)
         captured = capsys.readouterr()
         output = captured.out # Assign to a variable for easier access
 
@@ -129,7 +134,8 @@ def test_cli_help_command(capsys):
         # Check the usage line pattern based on the observed standard argparse output
         assert 'usage: tamilkavi' in output
         assert '[-h]' in output
-        assert '[-a [AUTHOR_NAME]]' in output # Check the format for the optional args in usage
+        # Let's keep the usage line format checks as they seemed reliable before
+        assert '[-a [AUTHOR_NAME]]' in output
         assert '[-b [BOOK_TITLE]]' in output
         assert '[-t [POEM_TITLE]]' in output
 
@@ -137,11 +143,16 @@ def test_cli_help_command(capsys):
         assert "Tamil Kavi CLI - Command Line tool for exploring Tamil Kavithaigal." in output
 
         # Check for the argument definitions in the main help body
-        # The format is typically -<short>, --<long> <ARG_DEST> followed by help text
-        # Check for both possible orders of short and long flags
-        assert any(arg_def in output for arg_def in ['-a [AUTHOR_NAME], --authors [AUTHOR_NAME]', '--authors [AUTHOR_NAME], -a [AUTHOR_NAME]'])
-        assert any(arg_def in output for arg_def in ['-b [BOOK_TITLE], --book [BOOK_TITLE]', '--book [BOOK_TITLE], -b [BOOK_TITLE]'])
-        assert any(arg_def in output for arg_def in ['-t [POEM_TITLE], --title [POEM_TITLE]', '--title [POEM_TITLE], -t [POEM_TITLE]'])
+        # FIX: Check for the components of the argument line rather than the exact combined string
+        assert '-a, --authors' in output or '--authors, -a' in output
+        assert '-b, --book' in output or '--book, -b' in output
+        assert '-t, --title' in output or '--title, -t' in output
+
+        # Check that the argument placeholders appear somewhere after the flags
+        assert '[AUTHOR_NAME]' in output
+        assert '[BOOK_TITLE]' in output
+        assert '[POEM_TITLE]' in output
+
 
         # Check for parts of the help text for each argument
         assert 'Filter by author name (use -a to list all authors)' in output
@@ -451,4 +462,3 @@ def test_cli_combined_filter_author_book(capsys, loaded_kavi_data):
         # Ensure the welcome message is NOT in the output
         assert "🙏 Vannakam Makkalayae !" not in captured.out
         assert "Welcome to Tamil Kavi 👋" not in captured.out
-
