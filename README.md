@@ -5,7 +5,7 @@
 [![Build Status](https://github.com/anandsundaramoorthysa/tamilkavi/actions/workflows/ci.yml/badge.svg)](https://github.com/anandsundaramoorthysa/tamilkavi/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/anandsundaramoorthysa/tamilkavi/branch/main/graph/badge.svg)](https://codecov.io/gh/anandsundaramoorthysa/tamilkavi)
 
-# Tamil Kavi
+# tamilkavi
 
 A command-line interface for exploring Tamil Kavithaigal (Tamil Poetry).
 
