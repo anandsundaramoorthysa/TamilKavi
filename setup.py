@@ -1,17 +1,18 @@
 from setuptools import setup, find_packages
 import os
 
-# Helper function to read file content
 def read(fname):
-    # Ensure reading with UTF-8 encoding
     return open(os.path.join(os.path.dirname(__file__), fname), encoding='utf-8').read()
+
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
 setup(
     name='tamilkavi',
     version='0.1.0',
     description='A command-line tool for exploring Tamil Kavithaigal.',
-    long_description=read('README.md'),
-    long_description_content_type='text/markdown',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author='ANAND SUNDARAMOORTHY SA and Boopalan S',
     author_email='sanand03072005@gmail.com, content.boopalan@gmail.com',
     url='https://github.com/anandsundaramoorthysa/tamilkavi',
