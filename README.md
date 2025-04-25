@@ -1,4 +1,3 @@
-
 ![PyPI version](https://img.shields.io/pypi/v/tamilkavi)
 ![License](https://img.shields.io/github/license/anandsundaramoorthysa/tamilkavi)
 ![Python Version](https://img.shields.io/static/v1?label=Python&message=3.7%2B&color=blue)
@@ -211,4 +210,4 @@ If you have any questions, feedback, or suggestions, feel free to reach out to t
 We want to express our gratitude to:
 
   * The open-source community and the developers of the Python libraries used in this project, such as `prettytable` and `importlib.resources`.
-  * Praveen Kumar Purushothaman ([@praveenscience](https://github.com/praveenscience)) for providing the subdomain [tamilkavi.jigg.win](https://www.google.com/url?sa=E&source=gmail&q=https://tamilkavi.jigg.win) for the project.
+  * Praveen Kumar Purushothaman ([@praveenscience](https://github.com/praveenscience)) for providing the subdomain [tamilkavi.jigg.win](https://tamilkavi.jigg.win) for the project.
