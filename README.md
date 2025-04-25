@@ -211,5 +211,4 @@ If you have any questions, feedback, or suggestions, feel free to reach out to t
 We want to express our gratitude to:
 
   * The open-source community and the developers of the Python libraries used in this project, such as `prettytable` and `importlib.resources`.
-  * Praveen Kumar Purushothaman ([@praveenscience](https://github.com/praveenscience)) for providing the subdomain for the project website.
-  * The association with [tamilkavi.jigg.win](https://www.google.com/url?sa=E&source=gmail&q=https://tamilkavi.jigg.win).
+  * Praveen Kumar Purushothaman ([@praveenscience](https://github.com/praveenscience)) for providing the subdomain [tamilkavi.jigg.win](https://www.google.com/url?sa=E&source=gmail&q=https://tamilkavi.jigg.win) for the project.

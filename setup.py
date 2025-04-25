@@ -26,7 +26,6 @@ setup(
         'Environment :: Console',
         'Natural Language :: Tamil',
         'Topic :: Text Processing',
-        'Topic :: Cultural',
         # Add specific Python versions you support (>=3.7)
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
