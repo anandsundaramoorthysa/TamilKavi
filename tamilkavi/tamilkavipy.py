@@ -290,7 +290,7 @@ tamilkavi -h
         print("\nTo explore the commands. Check,")
         print("👉 tamilkavi -h")
         print("\nAlso Check our website about this project:")
-        print("👉 https://tamilkavi.jigg.win")
+        print("👉 https://tamilkavi.com")
         sys.exit(0) 
 
     library = KaviExtraction()
