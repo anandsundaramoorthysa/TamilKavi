@@ -212,4 +212,7 @@ If you have any questions, feedback, or suggestions, feel free to reach out to t
 We want to express our gratitude to:
 
   * The open-source community and the developers of the Python libraries used in this project, such as `prettytable` and `importlib.resources`.
-  * Praveen Kumar Purushothaman ([@praveenscience](https://github.com/praveenscience)) for providing the subdomain [tamilkavi.com](https://tamilkavi.com) for the project.
+  * **Praveen Kumar Purushothaman** ([@praveenscience](https://github.com/praveenscience)) for providing the subdomain [tamilkavi.jigg.win](https://tamilkavi.jigg.win) for the website.
+  * **[Selvakumar Duraipandian](https://www.linkedin.com/in/selvakumarduraipandian/)** – *Sponsor (Domain Supporter)*
+    🙏 Thanks to him for sponsoring the **tamilkavi.com** domain for us.
+  * The association with the [TamilKavi Python Package](https://github.com/anandsundaramoorthysa/tamilkavi).
