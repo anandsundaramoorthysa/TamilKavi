@@ -4,7 +4,6 @@
 [![Build Status](https://github.com/anandsundaramoorthysa/tamilkavi/actions/workflows/ci.yml/badge.svg)](https://github.com/anandsundaramoorthysa/tamilkavi/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/anandsundaramoorthysa/tamilkavi/branch/main/graph/badge.svg)](https://codecov.io/gh/anandsundaramoorthysa/tamilkavi)
 ![PyPI Downloads](https://img.shields.io/pypi/dm/tamilkavi)
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/tamilkavi?period=total&units=international_system&left_color=black&right_color=blue&left_text=Total%20Downloads)](https://pepy.tech/project/tamilkavi)
 # tamilkavi
 
 A command-line interface for exploring Tamil Kavithaigal (Tamil Poetry).
