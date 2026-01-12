@@ -264,6 +264,7 @@ tamilkavi -h
     """
 
     parser = ArgumentParser(
+        prog='tamilkavi',
         description="Tamil Kavi CLI - Command Line tool for exploring Tamil Kavithaigal.",
         epilog=epilog_text,
         formatter_class=RawTextHelpFormatter
