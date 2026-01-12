@@ -1,0 +1,43 @@
+{
+    "author": "Raj Thambu",
+    "contact": "rthambu@gmail.com",
+    "books": [
+        {
+            "booktitle": "பொங்கல் வாழ்த்து",
+            "booktitle_tanglish": "Pongal Vaazhthu",
+            "description": "A song on pongal festival",
+            "category": "வாழ்த்து",
+            "context": [
+                {
+                    "title": "Pongal Vaazhthu",
+                    "line": "பொங்கலோ பொங்கல், தை பொங்கல் |\nவிதைத்து விளைத்து காணும் பொங்கல் ।\nபொங்கலோ பொங்கல், தை பொங்கல் ||\n\nகருவடைந்த காணி நிலத்தின் பயிரை |\nபேணி காத்த பெருமிகு உழவர் |\nஅதன், அறுவடை காணும் அகமகிழ் பொன் நாள் |\nஅதுவே, தமிழர் கொண்டாடும் தை பொங்கல் திருநாள் ||\n\nநன் கோலம் இட்ட |\nபொன் ஆரம் சூட்ட |\nஜல்லி காளை கட்ட |\nஇம்மண்ணின் பொன் விழா ||\n\nஎண் திசை கூடி |\nபண் இசை பாடி |\nபொன் சிலம்பு ஆடி |\nஒன்றி கூடும் விழா |\nஅதுவே, தமிழரின் தை பொங்கல் திருவிழா ||\n\nஇந்த புண்ணிய பூமி அளித்த பூசு மஞளும் |\nஅந்த கன்னி வயல் கொடுத்த கொத்து கரும்பும் |\nஎந்த வரம்பு மீரா வைத்த அருசுவை உணவும் |\nபந்தமிகு உறவுகளோடு பகிர்ந்து மகிழ்ந்த வண்ணம் |\nஅதுவே, தமிழர் கொண்டாடும் தை பொங்கல் தினம் ||\n\nஉழுதுண்டு வாழ்வாரைத் தொழுதுண்டு பின்செல்|\nஎன வழி கொண்ட பெருமானுக்கு,\nஒரு மானம் காட்டும் தினம் |\nஅதுவே, தமிழ் அன்னை பெற்ற வள்ளுவர் தினம் ||\n\nஅன்று போதியில் தெரித்த கேள்வி |\nஇன்று போகியில் எரித்த வேள்வி |\nஎன்று தமிழர் கணித்த நாள் |\nஅதுவே,\nஇனித்த பொங்கல் திருநாள் ||\n\nநல்லோர் ராசியும்,\nநம் முன்னோர் ஆசியும்,\nவைத்து தொழுக ஒருநாள் ||\n\nதிருமண்ணில் நீர் சேர்த்து,\nதிருநீரில் மண் சேர்த்து,\nதமிழ் வேதம் ஓதும் திருநாள் |\nஅதுவே,\nதமிழர் வணங்கும் தை பொங்கல் பெரு நாள் ||\n\nபொங்கலோ பொங்கல், தை பொங்கல்",
+                    "meaning": "A beautiful poem celebrating the Pongal festival, describing the harvest season, the hard work of farmers, the traditions of drawing kolam, decorating bulls, and the unity of Tamil people coming together to celebrate this auspicious day. The poem also references Thiruvalluvar Day and the significance of the festival in Tamil culture."
+                }
+            ]
+        },
+        {
+            "booktitle": "வாழ்த்து",
+            "booktitle_tanglish": "Poetry on Festival Greetings",
+            "description": "New Year, Diwali & Monsoon greetings in the form of Tamil Poetry",
+            "category": "வாழ்த்து",
+            "context": [
+                {
+                    "title": "Tamil New Year Greetings",
+                    "line": "புதிது புதிது என புத்தாண்டில் புனைவது யேன்? அதில் புதியது\nஎது? புரியாதது எது?\n\nபெரிது பெரிது என பேசும் பொழுது,\nசிரியது எது வென சிந்திப்பது புதிது…\n\nபொருள் பெருக்குவது எவ்வாறு என பொழுது போக்குவதற்க்கு\nமுன்,\nஉனக்கு உரியது எது வென உணர்வது புதிது…\n\nகுருகிய கோட்பாடுகளை காணொலி கழகத்தில் கற்பிக்கும்முன்,\nநெடிய பாதையின் நெரிமுறைகளை நெஞில் அமர்த்துவது\nபுதிது….\n\nதெரியும் என திமிராய் திரிவதை விட,\nதெரியாது என்ற தெளிவான பக்குவம் அடைதல் புதிது…\n\nபுதியது எது வாயின்,\nபழம் பொருளை நன்கு அரிவது புதிது !",
+                    "meaning": "A thoughtful poem about the New Year, questioning what is truly new and encouraging self-reflection. It suggests that instead of just talking big, thinking about what is small and meaningful is new. Before spending time, realizing what truly belongs to you is new. Before learning from videos, understanding the principles deeply in your heart is new. Instead of arrogantly thinking you know everything, gaining the clarity to admit you don't know is new. If you ask what is new, properly understanding the old things is new."
+                },
+                {
+                    "title": "Deepavali Greetings",
+                    "line": "திரியும் எண்ணயும் அகலில் புகலிட,\nதிரியும் எண்ணமும் அகத்திடம் வெளியிட ।\n\nதீப ஒளி வரிசையை பக்தியுடன் காண,\nதீய விழி மீட்க்கும் சக்தியுடன் பேண ।\n\nபளபளப்பு ஆடையுடன் பட்டாசு தெரிக்க,\nபளிச்சுடன் வீசும் பால் வண்ணப் பாங்குடன்।\n\nநலம் தரும் திரு நாளில்,\nநாவில் சிரிப்பும், நாள் தோரும் இன்பமும் பெருக,\nஇனிய நல் தீபாவளி வாழ்த்துக்கள் !!!",
+                    "meaning": "A beautiful Deepavali greeting poem that encourages letting go of wandering thoughts and expressing inner thoughts. It asks to see the row of diya lights with devotion and nurture the power to overcome evil eyes. It describes wearing bright clothes, bursting crackers, and spreading the white-colored joy. On this auspicious day that brings goodness, may laughter on the tongue and happiness throughout the days increase. Happy Deepavali greetings!"
+                },
+                {
+                    "title": "Monsoon Rain Greetings",
+                    "line": "ஓடும் நதி போல் நீ,\nஓட்டின் அதிபதி நீ,\nபாரின் வண்ணம் நீ,\nபார்க்கும் எண்ணம் நீ,\n\nபுவி பார்த்த அருவி துளி நீ,\nகவி வார்த்த கருவியும் நீ.\n\nவிண் தூண்டிவிட்ட விதையா நீ,\nஎன் கண்ணை மூடிவிட்ட கதையா நீ ?",
+                    "meaning": "A poetic greeting about monsoon rain, describing it as flowing like a river, the master of flow, the color of the earth, and the thought of seeing. It is the raindrop that the earth saw, and also the instrument that the poet used to write. Is it the seed that the sky planted, or is it the story that closed my eyes?"
+                }
+            ]
+        }
+    ]
+}
+
