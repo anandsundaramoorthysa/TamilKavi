@@ -144,9 +144,10 @@ def test_cli_help_command(capsys):
 
         # Check for the argument definitions in the main help body
         # FIX: Check for the components of the argument line rather than the exact combined string
-        assert '-a, --authors' in output or '--authors, -a' in output
-        assert '-b, --book' in output or '--book, -b' in output
-        assert '-t, --title' in output or '--title, -t' in output
+        # argparse outputs format: '-a [AUTHOR_NAME], --authors [AUTHOR_NAME]'
+        assert '-a [AUTHOR_NAME], --authors' in output or '--authors [AUTHOR_NAME], -a' in output
+        assert '-b [BOOK_TITLE], --book' in output or '--book [BOOK_TITLE], -b' in output
+        assert '-t [POEM_TITLE], --title' in output or '--title [POEM_TITLE], -t' in output
 
         # Check that the argument placeholders appear somewhere after the flags
         assert '[AUTHOR_NAME]' in output
