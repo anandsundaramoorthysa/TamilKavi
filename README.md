@@ -1,10 +1,9 @@
 ![PyPI version](https://img.shields.io/pypi/v/tamilkavi)
 ![License](https://img.shields.io/github/license/anandsundaramoorthysa/tamilkavi)
 ![Python Version](https://img.shields.io/static/v1?label=Python&message=3.7%2B&color=blue)
-<!-- ![PyPI Downloads](https://img.shields.io/pypi/dm/tamilkavi) -->
 [![Build Status](https://github.com/anandsundaramoorthysa/tamilkavi/actions/workflows/ci.yml/badge.svg)](https://github.com/anandsundaramoorthysa/tamilkavi/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/anandsundaramoorthysa/tamilkavi/branch/main/graph/badge.svg)](https://codecov.io/gh/anandsundaramoorthysa/tamilkavi)
-
+![PyPI Downloads](https://img.shields.io/pypi/dm/tamilkavi)
 # tamilkavi
 
 A command-line interface for exploring Tamil Kavithaigal (Tamil Poetry).
@@ -23,7 +22,7 @@ A command-line interface for exploring Tamil Kavithaigal (Tamil Poetry).
 
 Tamil Kavi is a simple and intuitive command-line tool designed to provide easy access to a curated collection of Tamil poetry. It empowers users to navigate through poems by listing authors, books, and titles, and by applying filters to find specific content. The poetry data is included as JSON files within the package, making the tool self-contained after installation.
 
-This project serves as a command-line companion and is proudly associated with the website [tamilkavi.com](https://tamilkavi.com), which offers additional details about it.
+This project serves as a command-line companion and is proudly associated with the website [tamilkavi.anandsundaramoorthy.com](https://tamilkavi.anandsundaramoorthy.com), which offers additional details about it.
 
 ## Installation & Run the Project
 
@@ -212,4 +211,7 @@ If you have any questions, feedback, or suggestions, feel free to reach out to t
 We want to express our gratitude to:
 
   * The open-source community and the developers of the Python libraries used in this project, such as `prettytable` and `importlib.resources`.
-  * Praveen Kumar Purushothaman ([@praveenscience](https://github.com/praveenscience)) for providing the subdomain [tamilkavi.com](https://tamilkavi.com) for the project.
+  * **Praveen Kumar Purushothaman** ([@praveenscience](https://github.com/praveenscience)) for providing the subdomain [tamilkavi.jigg.win](https://tamilkavi.jigg.win) for the website.
+  * **[Selvakumar Duraipandian](https://www.linkedin.com/in/selvakumarduraipandian/)** – *Sponsor (Domain Supporter)*
+    🙏 Thanks to him for sponsoring the **tamilkavi.com** domain for us.
+  * The association with the [TamilKavi Python Package](https://github.com/anandsundaramoorthysa/tamilkavi).

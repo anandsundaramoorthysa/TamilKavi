@@ -1,17 +1,79 @@
 import json
+import os
 import sys
-import textwrap
+import unicodedata
 import importlib.resources
 from pathlib import Path
 from argparse import ArgumentParser, RawTextHelpFormatter
 from prettytable import PrettyTable
 
 
+# Tamil vowel signs, the pulli, and the au length mark. These attach to the
+# preceding letter instead of standing on their own.
+_TAMIL_COMBINING = set(range(0x0BBE, 0x0BCE)) | {0x0B82, 0x0BD7}
+
+
+def enable_utf8_output():
+    """Make Tamil survive the trip to the terminal.
+
+    Windows consoles start on a legacy code page (437 by default) which cannot
+    encode Tamil at all, so the text is lost before anything is drawn. Switching
+    the console to UTF-8 and reconfiguring the streams is what makes it appear.
+    """
+    if sys.platform == "win32":
+        try:
+            import ctypes
+            ctypes.windll.kernel32.SetConsoleOutputCP(65001)
+        except Exception:
+            pass
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
+def tamil_letters(text):
+    """Split text into letters as a reader sees them, not Unicode code points.
+
+    'பிறப்பிலும்' is 11 code points but 6 letters. Counting code points is what
+    makes Tamil overflow every column it is put in.
+    """
+    letters = []
+    for ch in str(text):
+        if letters and (ord(ch) in _TAMIL_COMBINING or unicodedata.combining(ch)):
+            letters[-1] += ch
+        else:
+            letters.append(ch)
+    return letters
+
+
+def letter_len(text):
+    """Length of text measured in letters rather than code points."""
+    return len(tamil_letters(text))
+
+
+def wrap_lines(text, width=66):
+    """Word-wrap on spaces, measuring width in letters. Never splits a letter."""
+    words = str(text).split()
+    if not words:
+        return [""]
+    lines, current = [], words[0]
+    for word in words[1:]:
+        if letter_len(current) + 1 + letter_len(word) > width:
+            lines.append(current)
+            current = word
+        else:
+            current += " " + word
+    lines.append(current)
+    return lines
+
+
 def wrap_text(text, width=50):
-    """Wraps text to a specified width for display."""
+    """Wraps text to a specified width for display, counting Tamil letters."""
     if not isinstance(text, str):
         return text
-    return '\n'.join(textwrap.wrap(text, width))
+    return '\n'.join(wrap_lines(text, width))
 
 class KaviExtraction:
     def __init__(self):
@@ -196,35 +258,46 @@ def display_books_in_table(books):
     print(table)
 
 
-def display_kavithais_in_table(kavithais):
-    """Displays a list of poem context dictionaries in a table."""
-    table = PrettyTable()
-    table.field_names = ["SNO", "Kavithai Title", "Kavithai", "Kavithai Meaning"]
+POEM_WIDTH = 66
 
+
+def display_kavithais(kavithais, indent="  "):
+    """Print poems as blocks, preserving the line breaks the poet wrote.
+
+    A table cannot hold a kavithai. PrettyTable re-wraps every cell, which
+    flattens the line breaks that give a poem its shape, and its column maths
+    counts code points, so Tamil never lines up inside the borders anyway.
+    """
     if not kavithais:
         print("No poems to display.")
         return
 
     for index, kavithai in enumerate(kavithais, start=1):
-        row = [index]
+        title = kavithai.get('title') or 'N/A'
+        print("%s[%d] Kavithai Title: %s" % (indent, index, title))
+        print("%s    %s" % (indent, "-" * POEM_WIDTH))
 
-        # Get the poem title
-        kavithai_title = kavithai.get('title', 'N/A')
-        kavithai_text = kavithai.get('line', 'N/A')
-        kavithai_meaning = kavithai.get('meaning', 'N/A')
+        for authored_line in str(kavithai.get('line') or 'N/A').split("\n"):
+            if not authored_line.strip():
+                print("")
+                continue
+            # Long lines still have to fold, but an authored break is never
+            # invented or removed -- folded continuations are indented so you
+            # can tell them apart from a real line of the poem.
+            for position, piece in enumerate(wrap_lines(authored_line, POEM_WIDTH)):
+                print("%s    %s%s" % (indent, "  " if position else "", piece))
 
-        # Wrap the texts
-        kavithai_title_wrapped = wrap_text(kavithai_title, width=30)
-        kavithai_text_wrapped = wrap_text(kavithai_text, width=60)
-        kavithai_meaning_wrapped = wrap_text(kavithai_meaning, width=60)
-
-        # Add data to the row in the correct order
-        row.extend([kavithai_title_wrapped, kavithai_text_wrapped, kavithai_meaning_wrapped])
-        table.add_row(row)
-
-    print(table)
+        meaning = kavithai.get('meaning')
+        if meaning and meaning != 'N/A':
+            print("")
+            print("%s    Kavithai Meaning:" % indent)
+            for piece in wrap_lines(meaning, POEM_WIDTH):
+                print("%s    %s" % (indent, piece))
+        print("")
 
 def main():
+    enable_utf8_output()
+
     epilog_text = """
 Examples:
 
@@ -264,6 +337,7 @@ tamilkavi -h
     """
 
     parser = ArgumentParser(
+        prog='tamilkavi',
         description="Tamil Kavi CLI - Command Line tool for exploring Tamil Kavithaigal.",
         epilog=epilog_text,
         formatter_class=RawTextHelpFormatter
@@ -290,8 +364,17 @@ tamilkavi -h
         print("\nTo explore the commands. Check,")
         print("👉 tamilkavi -h")
         print("\nAlso Check our website about this project:")
-        print("👉 https://tamilkavi.com")
-        sys.exit(0) 
+        print("👉 https://tamilkavi.anandsundaramoorthy.com")
+
+        # Terminals draw one cell per code point, but a Tamil letter is often
+        # several code points, so no console shapes Tamil perfectly. The classic
+        # Windows console is the worst of them -- say so instead of letting the
+        # reader think the poems themselves are broken.
+        if sys.platform == "win32" and not os.environ.get("WT_SESSION"):
+            print("\nNote: the classic Windows console cannot shape Tamil script properly.")
+            print("For the best reading experience use Windows Terminal, or the website.")
+
+        sys.exit(0)
 
     library = KaviExtraction()
     current_data = library.saved_books
@@ -357,7 +440,7 @@ tamilkavi -h
                   if book_lookup:
                        print(f"✅ Book Title (Tanglish): {book_lookup[0].get('booktitle_tanglish', 'N/A')}")
 
-             display_kavithais_in_table(current_data)
+             display_kavithais(current_data)
              displayed = True
 
         elif args.book_title is not None and args.book_title != '__list_all_books__':
@@ -371,7 +454,7 @@ tamilkavi -h
                   print(f"✅ Book Title (Tamil): {book_data.get('booktitle', 'N/A')}")
                   print(f"📚 Category: {book_data.get('category', 'N/A')}")
                   print("📜 Poems / Kavithaigal:")
-                  display_kavithais_in_table(book_data.get('context', []))
+                  display_kavithais(book_data.get('context', []))
                   if len(current_data) > 1: print("-" * 30)
              displayed = True
 

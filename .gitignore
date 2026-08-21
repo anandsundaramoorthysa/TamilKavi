@@ -14,3 +14,9 @@ wheels/
 envir/
 *.egg
 MANIFEST
+# Python bytecode and test/coverage artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
