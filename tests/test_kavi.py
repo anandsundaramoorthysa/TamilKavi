@@ -466,3 +466,65 @@ def test_cli_combined_filter_author_book(capsys, loaded_kavi_data):
         # Ensure the welcome message is NOT in the output
         assert "🙏 Vannakam Makkalayae !" not in captured.out
         assert "Welcome to Tamil Kavi 👋" not in captured.out
+
+
+# --- Script handling ------------------------------------------------------
+# No terminal can shape Tamil, so the CLI romanises by default and only prints
+# the original script when explicitly asked.
+
+def test_default_output_is_tamil_script(capsys, loaded_kavi_data):
+    """With no flags the terminal gets the original Tamil script."""
+    with patch.object(sys, 'argv', ['tamilkavi', '-b']):
+        main()
+        captured = capsys.readouterr()
+
+    assert "இன்பமில்லா" in captured.out
+    assert "Inbamillaa" not in captured.out
+
+
+def test_english_flag_romanises(capsys, loaded_kavi_data):
+    """-e prints Tanglish, which every terminal on every OS can display."""
+    with patch.object(sys, 'argv', ['tamilkavi', '-b', '-e']):
+        main()
+        captured = capsys.readouterr()
+
+    assert "Inbamillaa" in captured.out
+    assert not any('஀' <= ch <= '௿' for ch in captured.out)
+
+
+def test_romanise_keeps_line_breaks_and_punctuation():
+    """Romanising must not disturb the shape of the poem."""
+    from tamilkavi.transliterate import romanise
+
+    poem = "ஓடும் நதி போல் நீ,\n\nவிண் தூண்டிவிட்ட விதையா நீ ?"
+    out = romanise(poem)
+
+    assert out.count("\n") == poem.count("\n")
+    assert out.endswith("?")
+    assert "," in out
+    assert not any('஀' <= ch <= '௿' for ch in out)
+
+
+def test_romanise_applies_tamil_sound_rules():
+    """The stop/voicing rules are what make the output readable."""
+    from tamilkavi.transliterate import romanise
+
+    assert romanise("நதி") == "Nadhi"          # hard at the start of a word
+    assert romanise("அதிபதி") == "Adhibadhi"   # softens between vowels
+    assert romanise("பொங்கல்") == "Pongal"      # nasal + stop is one sound
+    assert romanise("விட்ட") == "Vitta"         # doubled stays hard
+
+
+def test_read_is_browser_only(capsys, loaded_kavi_data, monkeypatch):
+    """--read must not print the poem: the terminal copy is the broken one."""
+    opened = []
+    monkeypatch.setattr("webbrowser.open", lambda url: opened.append(url) or True)
+
+    with patch.object(sys, 'argv', ['tamilkavi', '-t', 'Monsoon-Rain-Greetings', '--read']):
+        main()
+        captured = capsys.readouterr()
+
+    assert len(opened) == 1, "expected the browser to be opened exactly once"
+    assert "Monsoon-Rain-Greetings" not in captured.out
+    assert not any('஀' <= ch <= '௿' for ch in captured.out)
+    assert "browser" in captured.out.lower()

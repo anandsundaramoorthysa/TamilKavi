@@ -12,6 +12,7 @@ A command-line interface for exploring Tamil Kavithaigal (Tamil Poetry).
 
 - [About Project](#about-project)
 - [Installation & Run the Project](#installation--run-the-project)
+- [Reading Tamil in a terminal](#reading-tamil-in-a-terminal)
 - [Features](#features)
 - [Contribution](#contribution)
 - [License](#license)
@@ -32,7 +33,12 @@ You can install `tamilkavi` directly from the Python Package Index (PyPI) using 
 pip install tamilkavi
 ````
 
-This command will download and install the `tamilkavi` package and its dependencies (like `prettytable`) automatically.
+This installs `tamilkavi` and everything it needs. On Python 3.9+ the package has
+**no third-party dependencies at all** -- only the standard library -- so there is
+nothing that can fail to build. On Python 3.7 and 3.8, pip additionally installs the
+small `importlib_resources` backport automatically.
+
+It works on **Windows, macOS and Linux**.
 
 Once the installation is complete, you can run the `tamilkavi` command from any terminal window.
 
@@ -43,6 +49,11 @@ Tamil Kavi CLI - Command Line tool for exploring Tamil Kavithaigal.
 
 options:
   -h, --help            show this help message and exit
+  --version             Show the installed tamilkavi version and exit
+  -r, --read            Open the result in your browser, where Tamil renders correctly
+                        (no terminal can shape Tamil script properly)
+  -e, --english         Print the poem in Tanglish (romanised Tamil) instead of
+                        Tamil script. Readable in every terminal, on every OS
   -a [AUTHOR_NAME], --authors [AUTHOR_NAME]
                         Filter by author name (use -a to list all authors)
   -b [BOOK_TITLE], --book [BOOK_TITLE]
@@ -84,14 +95,48 @@ tamilkavi -a "Author Name" -b "Book Title" -t "Poem Title"
 
 # Get detailed help
 tamilkavi -h
+
+# Show the installed version
+tamilkavi --version
+
+# Read a poem properly, in your browser
+tamilkavi -t "Poem Title" --read
+
+# Show a poem in Tanglish, readable in any terminal
+tamilkavi -t "Poem Title" -e
 ```
+
+## Reading Tamil in a terminal
+
+A terminal draws one cell per Unicode code point, but a Tamil letter is usually
+several code points that have to be composed into a single shape. No terminal on
+any operating system does this correctly -- not Windows Terminal, not macOS
+Terminal or iTerm2, not GNOME Terminal. Tamil will always come out with its vowel
+signs detached and its clusters overlapping.
+
+That is not something this package can fix, so it gives you two ways around it:
+
+| Command | What you get | Works on |
+| --- | --- | --- |
+| `tamilkavi -t "..."` | Tamil script | every OS, but the shaping will look broken |
+| `tamilkavi -t "..." -e` | Tanglish (romanised) | every terminal, every OS, perfectly |
+| `tamilkavi -t "..." --read` | Real Tamil, in your browser | every OS, perfectly |
+
+`--read` opens the poem in your default browser, which shapes Tamil properly. It
+prints nothing to the terminal.
+
+The romanisation in `-e` follows Tamil's own sound rules rather than swapping
+letters one by one, so `நதி` becomes *nadhi* but `அதிபதி` becomes *adhibadhi*, and
+`பொங்கல்` becomes *pongal*.
 
 ## Features
 
   * **Comprehensive Listing:** Easily list all authors, books, and unique poem titles in the collection.
   * **Flexible Filtering:** Filter the poetry collection by author name, book title (supporting both Tamil and Tanglish titles), or poem title.
   * **Combined Search:** Apply multiple filters simultaneously (e.g., find poems with a specific title within a particular book by a certain author).
-  * **Structured Output:** Display lists of books and poems in easy-to-read, formatted tables.
+  * **Readable Output:** Poems print as blocks that keep the line breaks the poet wrote, instead of being squeezed into table cells.
+  * **Tanglish Mode:** `-e` romanises the poem so it is readable in any terminal on any operating system.
+  * **Browser Reading:** `--read` opens the poem in your browser, the only place Tamil script renders correctly.
   * **Self-Contained Data:** Includes poetry data within the package for offline access after installation.
   * **Command-Line Interface:** Provides a simple and powerful way to interact with the poetry collection directly from the terminal.
 
@@ -210,8 +255,10 @@ If you have any questions, feedback, or suggestions, feel free to reach out to t
 
 We want to express our gratitude to:
 
-  * The open-source community and the developers of the Python libraries used in this project, such as `prettytable` and `importlib.resources`.
-  * **Praveen Kumar Purushothaman** ([@praveenscience](https://github.com/praveenscience)) for providing the subdomain [tamilkavi.jigg.win](https://tamilkavi.jigg.win) for the website.
+  * The open-source community, and the authors of `importlib.resources` and its `importlib_resources` backport -- the only libraries this package now relies on.
+  * **Praveen Kumar Purushothaman** ([@praveenscience](https://github.com/praveenscience)) – *Early Hosting Supporter*
+    🙏 Thanks to him for providing the subdomain **tamilkavi.jigg.win**, which the website ran on in its early days.
   * **[Selvakumar Duraipandian](https://www.linkedin.com/in/selvakumarduraipandian/)** – *Sponsor (Domain Supporter)*
-    🙏 Thanks to him for sponsoring the **tamilkavi.com** domain for us.
+    🙏 Thanks to him for sponsoring the **tamilkavi.com** domain for a year, which the website ran on
+    before moving to [tamilkavi.anandsundaramoorthy.com](https://tamilkavi.anandsundaramoorthy.com).
   * The association with the [TamilKavi Python Package](https://github.com/anandsundaramoorthysa/tamilkavi).

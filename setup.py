@@ -4,12 +4,20 @@ import os
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname), encoding='utf-8').read()
 
+
+def read_version():
+    """Read __version__ from the package without importing it."""
+    for line in read(os.path.join('tamilkavi', '__init__.py')).splitlines():
+        if line.startswith('__version__'):
+            return line.split('=', 1)[1].strip().strip('"').strip("'")
+    raise RuntimeError('could not find __version__ in tamilkavi/__init__.py')
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name='tamilkavi',
-    version='0.7.0',
+    version=read_version(),
     description='A command-line tool for exploring Tamil Kavithaigal.',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -37,7 +45,6 @@ setup(
     keywords=['tamil', 'kavi', 'poetry', 'tamil poetry', 'text processing'],
 
     install_requires=[
-        'prettytable>=3.0.0',
         'importlib_resources ; python_version < "3.9"'
     ],
 

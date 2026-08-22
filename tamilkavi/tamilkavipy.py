@@ -1,11 +1,39 @@
+import io
 import json
 import os
 import sys
 import unicodedata
-import importlib.resources
 from pathlib import Path
 from argparse import ArgumentParser, RawTextHelpFormatter
-from prettytable import PrettyTable
+
+# importlib.resources.files() only exists from Python 3.9. On 3.7 and 3.8 the
+# same API comes from the importlib_resources backport, which setup.py installs
+# for those versions -- so use whichever one this interpreter has.
+try:
+    from importlib.resources import files as resource_files
+except ImportError:  # Python 3.7 / 3.8
+    from importlib_resources import files as resource_files
+
+try:
+    from tamilkavi import __version__
+except ImportError:  # running the module directly from a source checkout
+    __version__ = "unknown"
+
+try:
+    from tamilkavi.transliterate import romanise
+except ImportError:
+    from transliterate import romanise
+
+# Tamil script is what the CLI prints by default. -e romanises it instead,
+# because no terminal can shape Tamil, and --read opens it in a browser.
+ROMANISE_OUTPUT = False
+
+
+def for_terminal(text):
+    """Return text in whichever script the terminal was asked to show."""
+    if not ROMANISE_OUTPUT or not text:
+        return text
+    return romanise(text)
 
 
 # Tamil vowel signs, the pulli, and the au length mark. These attach to the
@@ -198,9 +226,10 @@ class KaviExtraction:
         # 'tamilkavi' is the name of your package as defined in setup.py
         # 'kavisrc' is the subdirectory within your package containing data
         try:
-            # This gets a Traversable object for the 'kavisrc' directory inside the 'tamilkavi' package
-            # This requires Python 3.9+ or the importlib_resources backport installed for Python 3.7/3.8
-            data_dir = importlib.resources.files('tamilkavi') / 'kavisrc'
+            # A Traversable for the 'kavisrc' directory inside the installed
+            # package. Works the same on every OS -- no filesystem paths built
+            # by hand, so it also survives being run from a zipped install.
+            data_dir = resource_files('tamilkavi') / 'kavisrc'
         except FileNotFoundError:
             print("⚠️  Package data directory 'kavisrc' not found.")
             sys.exit("Exiting: Cannot find data files within the package. Ensure kavisrc folder is included in package_data.")
@@ -239,26 +268,123 @@ class KaviExtraction:
             sys.exit("Exiting: No data loaded.")
 
 
-def display_books_in_table(books):
-    """Displays a list of book dictionaries in a table."""
-    table = PrettyTable()
-    table.field_names = ["SNO", "Book Title (Tanglish)", "Book Title (Tamil)", "Category"]
+POEM_WIDTH = 66
+
+# Whatever the last command displayed, kept so --read can hand it to a browser.
+_shown = {"poems": [], "books": []}
+
+
+_PAGE = """<!doctype html>
+<meta charset="utf-8">
+<title>%(title)s</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; padding: 3rem 1.5rem; background: #faf8f5; color: #1a1a1a;
+         font-family: "Nirmala UI", "Latha", "Noto Sans Tamil", sans-serif; }
+  main { max-width: 46rem; margin: 0 auto; }
+  h1 { font-size: 1rem; letter-spacing: .12em; text-transform: uppercase;
+       color: #8a7f70; font-weight: 600; margin: 0 0 2.5rem; }
+  article { margin: 0 0 3.5rem; }
+  h2 { font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+       color: #8a7f70; font-weight: 600; margin: 0 0 1rem; }
+  .kavithai { font-size: 1.5rem; line-height: 2.1; white-space: pre-wrap;
+              margin: 0 0 1.75rem; }
+  .porul { border-left: 2px solid #ddd4c8; padding-left: 1.25rem;
+           font-size: 1.05rem; line-height: 1.9; color: #55504a; }
+  .porul b { display: block; font-size: .75rem; letter-spacing: .1em;
+             text-transform: uppercase; color: #8a7f70; margin-bottom: .5rem; }
+  dl { margin: 0 0 2rem; font-size: 1.1rem; line-height: 1.8; }
+  dt { font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+       color: #8a7f70; }
+  dd { margin: 0 0 .75rem; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #16150f; color: #ece7de; }
+    h1, h2, dt, .porul b { color: #9b9184; }
+    .porul { border-left-color: #3a352c; color: #b8b0a4; }
+  }
+</style>
+<main>
+<h1>%(title)s</h1>
+%(body)s
+</main>
+"""
+
+
+def _esc(text):
+    return (str(text or "").replace("&", "&amp;")
+                           .replace("<", "&lt;").replace(">", "&gt;"))
+
+
+def render_page(poems, books, title="TamilKavi"):
+    """Build a standalone HTML page for whatever was just displayed."""
+    parts = []
+    for book in books:
+        parts.append(
+            "<article><h2>%s</h2><dl>"
+            "<dt>Booktitle</dt><dd>%s</dd>"
+            "<dt>Category</dt><dd>%s</dd>"
+            "<dt>Description</dt><dd>%s</dd></dl></article>" % (
+                _esc(book.get('booktitle_tanglish')), _esc(book.get('booktitle')),
+                _esc(book.get('category')), _esc(book.get('description'))))
+
+    for poem in poems:
+        meaning = poem.get('meaning')
+        porul = ("<div class='porul'><b>பொருள்</b>%s</div>" % _esc(meaning)) if meaning else ""
+        parts.append("<article><h2>%s</h2><div class='kavithai'>%s</div>%s</article>" % (
+            _esc(poem.get('title')), _esc(poem.get('line')), porul))
+
+    if not parts:
+        parts.append("<p>Nothing to show.</p>")
+    return _PAGE % {"title": _esc(title), "body": "\n".join(parts)}
+
+
+def open_in_browser(poems, books, title="TamilKavi"):
+    """Write the page to a temp file and open it in the default browser.
+
+    A terminal draws one cell per code point, but a Tamil letter is several code
+    points that have to be composed into one shape. No terminal does that, so a
+    kavithai always comes out broken. A browser shapes text properly, which is
+    the only way to actually read the poem on this machine.
+    """
+    import tempfile
+    import webbrowser
+
+    path = os.path.join(tempfile.gettempdir(), "tamilkavi.html")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(render_page(poems, books, title))
+    webbrowser.open(Path(path).as_uri())
+    print("🌐 Opened in your browser: %s" % path)
+
+
+def display_books(books, indent="  "):
+    """List books as labelled blocks rather than a table.
+
+    A column has to be padded to a fixed width, and no terminal agrees with us
+    about how wide Tamil is: the console draws one cell per code point, while a
+    Tamil letter is usually several. Any table therefore tears its own borders
+    apart. Putting the label first and the value after it removes the problem,
+    because nothing has to fit a column any more.
+    """
+    _shown["books"].extend(books)
 
     if not books:
         print("No books to display.")
         return
 
     for index, book in enumerate(books, start=1):
-        book_title_tanglish = book.get('booktitle_tanglish', 'N/A')
-        book_title_tamil = book.get('booktitle', 'N/A')
-        category = book.get('category', 'N/A')
+        print("%s[%d] Book Title (Tanglish): %s" % (
+            indent, index, book.get('booktitle_tanglish') or 'N/A'))
+        print("%s    Book Title (Tamil):    %s" % (
+            indent, for_terminal(book.get('booktitle')) or 'N/A'))
+        print("%s    Category:              %s" % (
+            indent, for_terminal(book.get('category')) or 'N/A'))
 
-        table.add_row([index, wrap_text(book_title_tanglish, 40), wrap_text(book_title_tamil, 40), wrap_text(category, 20)]) # Add category to row
-
-    print(table)
-
-
-POEM_WIDTH = 66
+        description = book.get('description')
+        if description:
+            for position, piece in enumerate(wrap_lines(for_terminal(description), POEM_WIDTH)):
+                label = "Description:           " if position == 0 else " " * 23
+                print("%s    %s%s" % (indent, label, piece))
+        print("")
 
 
 def display_kavithais(kavithais, indent="  "):
@@ -268,6 +394,8 @@ def display_kavithais(kavithais, indent="  "):
     flattens the line breaks that give a poem its shape, and its column maths
     counts code points, so Tamil never lines up inside the borders anyway.
     """
+    _shown["poems"].extend(kavithais)
+
     if not kavithais:
         print("No poems to display.")
         return
@@ -277,7 +405,7 @@ def display_kavithais(kavithais, indent="  "):
         print("%s[%d] Kavithai Title: %s" % (indent, index, title))
         print("%s    %s" % (indent, "-" * POEM_WIDTH))
 
-        for authored_line in str(kavithai.get('line') or 'N/A').split("\n"):
+        for authored_line in str(for_terminal(kavithai.get('line')) or 'N/A').split("\n"):
             if not authored_line.strip():
                 print("")
                 continue
@@ -291,7 +419,7 @@ def display_kavithais(kavithais, indent="  "):
         if meaning and meaning != 'N/A':
             print("")
             print("%s    Kavithai Meaning:" % indent)
-            for piece in wrap_lines(meaning, POEM_WIDTH):
+            for piece in wrap_lines(for_terminal(meaning), POEM_WIDTH):
                 print("%s    %s" % (indent, piece))
         print("")
 
@@ -342,10 +470,21 @@ tamilkavi -h
         epilog=epilog_text,
         formatter_class=RawTextHelpFormatter
     )
+    parser.add_argument('--version', action='version', version='%(prog)s ' + __version__,
+                        help="Show the installed tamilkavi version and exit")
+    parser.add_argument('-r', '--read', action='store_true',
+                        help="Open the result in your browser, where Tamil renders correctly\n"
+                             "(no terminal can shape Tamil script properly)")
+    parser.add_argument('-e', '--english', action='store_true',
+                        help="Print the poem in Tanglish (romanised Tamil) instead of\n"
+                             "Tamil script. Readable in every terminal, on every OS")
     parser.add_argument("-a", '--authors', dest="author_name", nargs='?', const='__list_all__', type=str, help="Filter by author name (use -a to list all authors)")
     parser.add_argument("-b", '--book', dest="book_title", nargs='?', const='__list_all_books__', type=str, help="Filter by book title (use -b to list all books)")
     parser.add_argument("-t", '--title', dest="poem_title", nargs='?', const='__list_all_titles__', type=str, help="Filter by poem title (use -t to list all unique titles)")
     args = parser.parse_args()
+
+    global ROMANISE_OUTPUT
+    ROMANISE_OUTPUT = args.english
 
     # Check if *any* of the filter arguments (-a, -b, -t) were provided with *any* value (including the const values)
     is_any_filter_requested = (
@@ -375,6 +514,12 @@ tamilkavi -h
             print("For the best reading experience use Windows Terminal, or the website.")
 
         sys.exit(0)
+
+    # --read is a browser-only mode: the terminal copy would be the broken one,
+    # so the normal output is captured and thrown away rather than shown.
+    real_stdout = sys.stdout
+    if args.read:
+        sys.stdout = io.StringIO()
 
     library = KaviExtraction()
     current_data = library.saved_books
@@ -409,7 +554,7 @@ tamilkavi -h
     elif args.book_title == '__list_all_books__':
         print("📚 Available Books / Irrukum Puthagangal:")
         all_books = library.get_all_books(library.saved_books)
-        display_books_in_table(all_books)
+        display_books(all_books)
         displayed = True
 
     elif args.poem_title == '__list_all_titles__':
@@ -465,7 +610,7 @@ tamilkavi -h
              all_books = author_data.get("books", [])
              if all_books:
                  print("📚 Books / Puthagangal:")
-                 display_books_in_table(all_books)
+                 display_books(all_books)
              else:
                   print("⚠️  No books found for this author.")
              displayed = True
@@ -478,6 +623,13 @@ tamilkavi -h
     if not displayed:
          print("⚠️  Unhandled command or display scenario.")
          print("Use -h for help.")
+
+    if args.read:
+        sys.stdout = real_stdout
+        heading = args.poem_title or args.book_title or args.author_name or "TamilKavi"
+        if heading.startswith("__list_all"):
+            heading = "TamilKavi"
+        open_in_browser(_shown["poems"], _shown["books"], heading)
 
 
 if __name__ == "__main__":
