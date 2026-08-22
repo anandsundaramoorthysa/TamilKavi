@@ -123,7 +123,11 @@ That is not something this package can fix, so it gives you two ways around it:
 | `tamilkavi -t "..." --read` | Real Tamil, in your browser | every OS, perfectly |
 
 `--read` opens the poem in your default browser, which shapes Tamil properly. It
-prints nothing to the terminal.
+prints nothing else to the terminal. If nothing matched your filter it says so and
+opens no browser, rather than showing you an empty page.
+
+`-e` and `--read` combine: ask for romanised output and you get it in the browser
+too, not just the terminal.
 
 The romanisation in `-e` follows Tamil's own sound rules rather than swapping
 letters one by one, so `நதி` becomes *nadhi* but `அதிபதி` becomes *adhibadhi*, and

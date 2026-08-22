@@ -3,7 +3,7 @@
 ## Steps to Update and Publish the Package
 
 ### 1. Update Version Number
-✅ Already done - Version updated to 0.8.0
+✅ Already done - Version updated to 0.8.1
 
 The version lives in **one place only**: `tamilkavi/__init__.py`. `setup.py` reads it
 from there and `tamilkavi --version` reports it, so they cannot drift apart. To bump a
@@ -33,13 +33,13 @@ python -m build
 ```
 
 This will create:
-- `dist/tamilkavi-0.8.0.tar.gz` (source distribution)
-- `dist/tamilkavi-0.8.0-py3-none-any.whl` (wheel distribution)
+- `dist/tamilkavi-0.8.1.tar.gz` (source distribution)
+- `dist/tamilkavi-0.8.1-py3-none-any.whl` (wheel distribution)
 
 ### 5. Test the Build Locally (Optional)
 ```bash
 # Install the new version locally
-pip install dist/tamilkavi-0.8.0-py3-none-any.whl --force-reinstall
+pip install dist/tamilkavi-0.8.1-py3-none-any.whl --force-reinstall
 
 # Test it
 tamilkavi -a "Raj Thambu"
@@ -64,6 +64,16 @@ After publishing, users can install the updated version:
 ```bash
 pip install --upgrade tamilkavi
 ```
+
+## What's New in Version 0.8.1
+
+- ✅ **`--read` no longer opens a blank browser tab.** Asking for a poem that does
+  not exist now prints `No results found.` and opens nothing. Previously the
+  message was swallowed and an empty page appeared instead.
+- ✅ **`-e` is honoured with `--read`.** The flag used to be silently ignored, so
+  the browser always showed Tamil script. Ask for romanised output and you get it,
+  whichever way you are reading.
+- ✅ Fixed results leaking between runs of `main()` in the same process.
 
 ## What's New in Version 0.8.0
 

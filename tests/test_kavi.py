@@ -528,3 +528,37 @@ def test_read_is_browser_only(capsys, loaded_kavi_data, monkeypatch):
     assert "Monsoon-Rain-Greetings" not in captured.out
     assert not any('஀' <= ch <= '௿' for ch in captured.out)
     assert "browser" in captured.out.lower()
+
+
+def test_read_with_no_results_does_not_open_a_browser(capsys, loaded_kavi_data, monkeypatch):
+    """A typo with --read must say so, not open a blank browser tab."""
+    opened = []
+    monkeypatch.setattr("webbrowser.open", lambda url: opened.append(url) or True)
+
+    with patch.object(sys, 'argv', ['tamilkavi', '-t', 'NoSuchPoemXYZ', '--read']):
+        main()
+        captured = capsys.readouterr()
+
+    assert opened == [], "should not open a browser when nothing matched"
+    assert "No results found." in captured.out
+
+
+def test_english_flag_applies_to_the_browser_page(loaded_kavi_data):
+    """-e must not be silently ignored when combined with --read."""
+    from tamilkavi import tamilkavipy as tk
+
+    library = tk.KaviExtraction()
+    poems = library.get_titles('Monsoon-Rain-Greetings', library.saved_books)
+    assert poems
+
+    original = tk.ROMANISE_OUTPUT
+    try:
+        tk.ROMANISE_OUTPUT = False
+        assert any('஀' <= ch <= '௿' for ch in tk.render_page(poems, [], 'x'))
+
+        tk.ROMANISE_OUTPUT = True
+        romanised = tk.render_page(poems, [], 'x')
+        assert 'Odum' in romanised
+        assert not any('஀' <= ch <= '௿' for ch in romanised.split("<main>")[1])
+    finally:
+        tk.ROMANISE_OUTPUT = original

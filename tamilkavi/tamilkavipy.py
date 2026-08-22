@@ -29,8 +29,8 @@ except ImportError:
 ROMANISE_OUTPUT = False
 
 
-def for_terminal(text):
-    """Return text in whichever script the terminal was asked to show."""
+def in_selected_script(text):
+    """Return text in whichever script was asked for: Tamil, or -e romanised."""
     if not ROMANISE_OUTPUT or not text:
         return text
     return romanise(text)
@@ -324,14 +324,20 @@ def render_page(poems, books, title="TamilKavi"):
             "<dt>Booktitle</dt><dd>%s</dd>"
             "<dt>Category</dt><dd>%s</dd>"
             "<dt>Description</dt><dd>%s</dd></dl></article>" % (
-                _esc(book.get('booktitle_tanglish')), _esc(book.get('booktitle')),
-                _esc(book.get('category')), _esc(book.get('description'))))
+                _esc(book.get('booktitle_tanglish')),
+                _esc(in_selected_script(book.get('booktitle'))),
+                _esc(in_selected_script(book.get('category'))),
+                _esc(in_selected_script(book.get('description')))))
 
     for poem in poems:
-        meaning = poem.get('meaning')
-        porul = ("<div class='porul'><b>பொருள்</b>%s</div>" % _esc(meaning)) if meaning else ""
+        # -e applies here too. The browser is where Tamil script renders properly,
+        # but if romanised output was asked for, the flag should still be honoured
+        # rather than silently ignored.
+        meaning = in_selected_script(poem.get('meaning'))
+        label = "Porul" if ROMANISE_OUTPUT else "பொருள்"
+        porul = ("<div class='porul'><b>%s</b>%s</div>" % (label, _esc(meaning))) if meaning else ""
         parts.append("<article><h2>%s</h2><div class='kavithai'>%s</div>%s</article>" % (
-            _esc(poem.get('title')), _esc(poem.get('line')), porul))
+            _esc(poem.get('title')), _esc(in_selected_script(poem.get('line'))), porul))
 
     if not parts:
         parts.append("<p>Nothing to show.</p>")
@@ -375,13 +381,13 @@ def display_books(books, indent="  "):
         print("%s[%d] Book Title (Tanglish): %s" % (
             indent, index, book.get('booktitle_tanglish') or 'N/A'))
         print("%s    Book Title (Tamil):    %s" % (
-            indent, for_terminal(book.get('booktitle')) or 'N/A'))
+            indent, in_selected_script(book.get('booktitle')) or 'N/A'))
         print("%s    Category:              %s" % (
-            indent, for_terminal(book.get('category')) or 'N/A'))
+            indent, in_selected_script(book.get('category')) or 'N/A'))
 
         description = book.get('description')
         if description:
-            for position, piece in enumerate(wrap_lines(for_terminal(description), POEM_WIDTH)):
+            for position, piece in enumerate(wrap_lines(in_selected_script(description), POEM_WIDTH)):
                 label = "Description:           " if position == 0 else " " * 23
                 print("%s    %s%s" % (indent, label, piece))
         print("")
@@ -405,7 +411,7 @@ def display_kavithais(kavithais, indent="  "):
         print("%s[%d] Kavithai Title: %s" % (indent, index, title))
         print("%s    %s" % (indent, "-" * POEM_WIDTH))
 
-        for authored_line in str(for_terminal(kavithai.get('line')) or 'N/A').split("\n"):
+        for authored_line in str(in_selected_script(kavithai.get('line')) or 'N/A').split("\n"):
             if not authored_line.strip():
                 print("")
                 continue
@@ -419,7 +425,7 @@ def display_kavithais(kavithais, indent="  "):
         if meaning and meaning != 'N/A':
             print("")
             print("%s    Kavithai Meaning:" % indent)
-            for piece in wrap_lines(for_terminal(meaning), POEM_WIDTH):
+            for piece in wrap_lines(in_selected_script(meaning), POEM_WIDTH):
                 print("%s    %s" % (indent, piece))
         print("")
 
@@ -485,6 +491,8 @@ tamilkavi -h
 
     global ROMANISE_OUTPUT
     ROMANISE_OUTPUT = args.english
+    _shown["poems"].clear()
+    _shown["books"].clear()
 
     # Check if *any* of the filter arguments (-a, -b, -t) were provided with *any* value (including the const values)
     is_any_filter_requested = (
@@ -518,8 +526,9 @@ tamilkavi -h
     # --read is a browser-only mode: the terminal copy would be the broken one,
     # so the normal output is captured and thrown away rather than shown.
     real_stdout = sys.stdout
+    captured = io.StringIO()
     if args.read:
-        sys.stdout = io.StringIO()
+        sys.stdout = captured
 
     library = KaviExtraction()
     current_data = library.saved_books
@@ -626,6 +635,11 @@ tamilkavi -h
 
     if args.read:
         sys.stdout = real_stdout
+        if not (_shown["poems"] or _shown["books"]):
+            # Nothing matched, so there is no page worth opening. Show the
+            # message that was captured instead of a blank browser tab.
+            sys.stdout.write(captured.getvalue())
+            return 1
         heading = args.poem_title or args.book_title or args.author_name or "TamilKavi"
         if heading.startswith("__list_all"):
             heading = "TamilKavi"
