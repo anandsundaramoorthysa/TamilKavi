@@ -18,7 +18,7 @@ if [ $? -eq 0 ]; then
     echo "   python -m twine upload dist/*"
     echo ""
     echo "🧪 To test locally, run:"
-    echo "   pip install dist/tamilkavi-0.7.0-py3-none-any.whl --force-reinstall"
+    echo "   pip install dist/tamilkavi-0.8.0-py3-none-any.whl --force-reinstall"
 else
     echo "❌ Build failed!"
     exit 1

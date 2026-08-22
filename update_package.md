@@ -3,7 +3,11 @@
 ## Steps to Update and Publish the Package
 
 ### 1. Update Version Number
-✅ Already done - Version updated from 0.6.0 to 0.7.0 in `setup.py`
+✅ Already done - Version updated to 0.8.0
+
+The version lives in **one place only**: `tamilkavi/__init__.py`. `setup.py` reads it
+from there and `tamilkavi --version` reports it, so they cannot drift apart. To bump a
+release, edit that one line.
 
 ### 2. Clean Old Build Files
 ```bash
@@ -29,13 +33,13 @@ python -m build
 ```
 
 This will create:
-- `dist/tamilkavi-0.7.0.tar.gz` (source distribution)
-- `dist/tamilkavi-0.7.0-py3-none-any.whl` (wheel distribution)
+- `dist/tamilkavi-0.8.0.tar.gz` (source distribution)
+- `dist/tamilkavi-0.8.0-py3-none-any.whl` (wheel distribution)
 
 ### 5. Test the Build Locally (Optional)
 ```bash
 # Install the new version locally
-pip install dist/tamilkavi-0.7.0-py3-none-any.whl --force-reinstall
+pip install dist/tamilkavi-0.8.0-py3-none-any.whl --force-reinstall
 
 # Test it
 tamilkavi -a "Raj Thambu"
@@ -60,6 +64,38 @@ After publishing, users can install the updated version:
 ```bash
 pip install --upgrade tamilkavi
 ```
+
+## What's New in Version 0.8.0
+
+Corrects the record: the previous release was numbered 0.7.1, but it added features
+rather than fixing bugs, so it should have been a minor bump. This release carries
+that work under the right number, plus the documentation that was missed.
+
+- ✅ **Read Tamil that actually renders**
+
+  No terminal on any operating system shapes Tamil script correctly. A terminal draws
+  one cell per Unicode code point, but a Tamil letter is usually several code points
+  that must compose into one shape, so clusters always break apart. Two ways around it:
+
+  - `-e` / `--english` prints the poem in Tanglish. It follows Tamil's own sound rules
+    rather than swapping letters one by one, so `நதி` is *nadhi* but `அதிபதி` is
+    *adhibadhi*, `பொங்கல்` is *pongal*, and `விட்ட` is *vitta*. Readable in every
+    terminal, on every OS.
+  - `-r` / `--read` opens the poem in your browser, which shapes Tamil properly. It
+    prints nothing to the terminal, since the terminal copy is the broken one.
+
+- ✅ **`--version`** reports the installed version.
+
+- ✅ **No third-party dependencies** on Python 3.9+. Books are listed as labelled
+  blocks instead of a table -- column widths can never be correct for Tamil, so the
+  borders always tore -- which removed the last use of `prettytable`.
+
+- ✅ **Fixed a break on Python 3.7 and 3.8.** `setup.py` installed the
+  `importlib_resources` backport for those versions, but the code called
+  `importlib.resources.files()` directly, which only exists from 3.9. The package
+  installed and then crashed on startup.
+
+- ✅ Works on Windows, macOS and Linux.
 
 ## What's New in Version 0.7.0
 - ✅ Tamil now actually displays in the terminal
